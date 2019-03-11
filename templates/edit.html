@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">书籍名称</label>
+{#            默认显示出存在的信息，这样才算是修改#}
+            <input type="text" class="form-control" id="title" name="title" placeholder="title"value="{{ edit_list.title }}">
+        </div>
+        <div class="form-group">
+            <label for="price">价格</label>
+            <input type="text" class="form-control" id="price" value="{{ edit_list.price }}" name="price" placeholder="price">
+        </div>
+        <div class="form-group">
+            <label for="pub_date">出版日期</label>
+            <input type="date" class="form-control" id="pub_date" name="pub_date" placeholder="pub_date"value="{{ edit_list.pub_date|date:'Y-m-d' }}">
+        </div>
+        <div class="form-group">
+            <label for="publish">出版社</label>
+            <select name="publish_id" id="publish" class="form-control"value="{{ edit_list.publish }}">
+
+                {% for publish in publish_list %}
+                    {% if edit_list.publish %}
+{#                        如果有那么默认就是被选中#}
+                        <option selected value="{{ publish.pk }}">{{ publish.name }}</option>
+                    {%  else %}
+                        <option  value="{{ publish.pk }}">{{ publish.name }}</option>
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="name">作者</label>
+
+            <select name="author" id="name" class="form-control " multiple>   {# multiple  ：表示可以多选#}
+                {% for author in author_list %}
+                    {% if author in edit_list.authors.all %}
+                        <option selected value="{{ author.pk }}">{{ author.name }}</option>
+                        {%  else %}
+                        <option value="{{ author.pk }}">{{ author.name }}</option>
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+        </div>
+        <input type="submit" value="提交" class="btn btn-success pull-right">
+    </form>
+
+{% endblock %}
+
+edit.html
